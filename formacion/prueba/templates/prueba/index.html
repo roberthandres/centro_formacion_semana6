@@ -4,16 +4,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Lista de Aprendices</title>
 
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
             background: #f1f5f9;
             color: #1e293b;
             padding: 35px;
         }
+
         .encabezado {
             background: linear-gradient(135deg, #0f172a, #1e40af);
             color: white;
@@ -22,14 +29,24 @@
             margin-bottom: 25px;
             box-shadow: 0 8px 20px rgba(15, 23, 42, 0.15);
         }
-        .encabezado h1 { font-size: 30px; margin-bottom: 8px; }
-        .encabezado p { color: #cbd5e1; font-size: 15px; }
+
+        .encabezado h1 {
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+
+        .encabezado p {
+            color: #cbd5e1;
+            font-size: 15px;
+        }
+
         .contenedor {
             background: white;
             padding: 25px;
             border-radius: 15px;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
         }
+
         .barra-superior {
             display: flex;
             justify-content: space-between;
@@ -38,10 +55,21 @@
             flex-wrap: wrap;
             margin-bottom: 25px;
         }
-        .barra-superior h2 { font-size: 21px; color: #0f172a; }
-        .btn-crear {
+
+        .barra-superior h2 {
+            font-size: 21px;
+            color: #0f172a;
+        }
+
+        .botones-superiores {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn-crear,
+        .btn-mapa {
             display: inline-block;
-            background: #16a34a;
             color: white;
             padding: 12px 18px;
             border-radius: 8px;
@@ -50,7 +78,25 @@
             font-weight: bold;
             transition: 0.3s;
         }
-        .btn-crear:hover { background: #15803d; transform: translateY(-2px); }
+
+        .btn-crear {
+            background: #16a34a;
+        }
+
+        .btn-crear:hover {
+            background: #15803d;
+            transform: translateY(-2px);
+        }
+
+        .btn-mapa {
+            background: #2563eb;
+        }
+
+        .btn-mapa:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+        }
+
         .mensaje {
             background: #dcfce7;
             color: #166534;
@@ -59,14 +105,25 @@
             border-left: 5px solid #16a34a;
             border-radius: 8px;
         }
+
         .tabla-contenedor {
             width: 100%;
             overflow-x: auto;
             border-radius: 10px;
             border: 1px solid #e2e8f0;
         }
-        table { width: 100%; border-collapse: collapse; min-width: 950px; }
-        thead { background: #1e3a8a; color: white; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 950px;
+        }
+
+        thead {
+            background: #1e3a8a;
+            color: white;
+        }
+
         th {
             padding: 16px 14px;
             text-align: left;
@@ -75,27 +132,33 @@
             letter-spacing: 0.4px;
             white-space: nowrap;
         }
-        td { padding: 15px 14px; border-bottom: 1px solid #e2e8f0; font-size: 14px; }
-        tbody tr:nth-child(even) { background: #f8fafc; }
-        tbody tr:hover { background: #eff6ff; }
-        tbody tr:last-child td { border-bottom: none; }
 
-        .btn-editar {
-            display: inline-block;
-            background: #0f766e;
-            color: white;
-            padding: 8px 13px;
-            text-decoration: none;
-            border-radius: 6px;
-            font-size: 13px;
-            font-weight: bold;
-            transition: 0.3s;
+        td {
+            padding: 15px 14px;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 14px;
         }
-        .btn-editar:hover { background: #115e59; transform: translateY(-1px); }
 
+        tbody tr:nth-child(even) {
+            background: #f8fafc;
+        }
+
+        tbody tr:hover {
+            background: #eff6ff;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .acciones {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-editar,
         .btn-eliminar {
             display: inline-block;
-            background: #dc2626;
             color: white;
             padding: 8px 13px;
             text-decoration: none;
@@ -104,39 +167,112 @@
             font-weight: bold;
             transition: 0.3s;
         }
-        .btn-eliminar:hover { background: #991b1b; transform: translateY(-1px); }
 
-        .acciones { display: flex; gap: 8px; }
-        .sin-registros { text-align: center; padding: 35px; color: #64748b; font-size: 15px; }
-        .pie { margin-top: 18px; color: #64748b; font-size: 13px; text-align: right; }
+        .btn-editar {
+            background: #0f766e;
+        }
+
+        .btn-editar:hover {
+            background: #115e59;
+        }
+
+        .btn-eliminar {
+            background: #dc2626;
+        }
+
+        .btn-eliminar:hover {
+            background: #991b1b;
+        }
+
+        .sin-registros {
+            text-align: center;
+            padding: 35px;
+            color: #64748b;
+            font-size: 15px;
+        }
+
+        .pie {
+            margin-top: 18px;
+            color: #64748b;
+            font-size: 13px;
+            text-align: right;
+        }
 
         @media (max-width: 768px) {
-            body { padding: 15px; }
-            .encabezado { padding: 22px; }
-            .encabezado h1 { font-size: 24px; }
-            .contenedor { padding: 15px; }
-            .barra-superior { align-items: flex-start; flex-direction: column; }
-            .btn-crear { width: 100%; text-align: center; }
+            body {
+                padding: 15px;
+            }
+
+            .encabezado {
+                padding: 22px;
+            }
+
+            .encabezado h1 {
+                font-size: 24px;
+            }
+
+            .contenedor {
+                padding: 15px;
+            }
+
+            .barra-superior {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .botones-superiores {
+                width: 100%;
+                flex-direction: column;
+            }
+
+            .btn-crear,
+            .btn-mapa {
+                width: 100%;
+                text-align: center;
+            }
         }
     </style>
 </head>
+
 <body>
+
     <header class="encabezado">
         <h1>Panel de Aprendices</h1>
         <p>Centro de Formación | Gestión y administración de aprendices</p>
     </header>
+
     <main class="contenedor">
+
         {% if messages %}
             {% for message in messages %}
-                <div class="mensaje">{{ message }}</div>
+                <div class="mensaje">
+                    {{ message }}
+                </div>
             {% endfor %}
         {% endif %}
+
         <div class="barra-superior">
+
             <h2>Listado de aprendices</h2>
-            <a href="{% url 'crear_aprendiz' %}" class="btn-crear">+ Crear aprendiz</a>
+
+            <div class="botones-superiores">
+
+                <a href="{% url 'crear_aprendiz' %}" class="btn-crear">
+                    + Crear aprendiz
+                </a>
+
+                <a href="{% url 'mapa_aprendices' %}" class="btn-mapa">
+                    📍 Ver mapa de aprendices
+                </a>
+
+            </div>
+
         </div>
+
         <div class="tabla-contenedor">
+
             <table>
+
                 <thead>
                     <tr>
                         <th>Nombre</th>
@@ -150,16 +286,27 @@
                         <th>Acciones</th>
                     </tr>
                 </thead>
+
                 <tbody>
+
                     {% for aprendiz in aprendices %}
+
                     <tr>
+
                         <td>{{ aprendiz.nombre }}</td>
+
                         <td>{{ aprendiz.apellido }}</td>
+
                         <td>{{ aprendiz.tipo_documento }}</td>
+
                         <td>{{ aprendiz.documento }}</td>
+
                         <td>{{ aprendiz.telefono }}</td>
+
                         <td>{{ aprendiz.correo }}</td>
+
                         <td>{{ aprendiz.ficha }}</td>
+
                         <td>
                             {% if aprendiz.programa %}
                                 {{ aprendiz.programa.nombre }}
@@ -167,22 +314,47 @@
                                 Sin programa
                             {% endif %}
                         </td>
+
                         <td>
                             <div class="acciones">
-                                <a href="{% url 'editar_aprendiz' aprendiz.documento %}" class="btn-editar">Editar</a>
-                                <a href="{% url 'eliminar_aprendiz' aprendiz.documento %}" class="btn-eliminar">Eliminar</a>
+
+                                <a href="{% url 'editar_aprendiz' aprendiz.documento %}"
+                                   class="btn-editar">
+                                    Editar
+                                </a>
+
+                                <a href="{% url 'eliminar_aprendiz' aprendiz.documento %}"
+                                   class="btn-eliminar">
+                                    Eliminar
+                                </a>
+
                             </div>
                         </td>
+
                     </tr>
+
                     {% empty %}
+
                     <tr>
-                        <td colspan="9" class="sin-registros">No hay aprendices registrados. ¡Crea el primero!</td>
+                        <td colspan="9" class="sin-registros">
+                            No hay aprendices registrados.
+                            ¡Crea el primero!
+                        </td>
                     </tr>
+
                     {% endfor %}
+
                 </tbody>
+
             </table>
+
         </div>
-        <div class="pie">Sistema de gestión de aprendices</div>
+
+        <div class="pie">
+            Sistema de gestión de aprendices
+        </div>
+
     </main>
+
 </body>
 </html>

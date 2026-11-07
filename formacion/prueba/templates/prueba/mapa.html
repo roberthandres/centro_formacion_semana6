@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Mapa de Aprendices</title>
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet"
+          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            padding: 25px;
+        }
+
+        .contenedor {
+            max-width: 1100px;
+            margin: auto;
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        h1 {
+            color: #166534;
+            margin-bottom: 10px;
+        }
+
+        p {
+            margin-bottom: 15px;
+            color: #475569;
+        }
+
+        #mapa {
+            width: 100%;
+            height: 550px;
+            border-radius: 12px;
+            border: 2px solid #ddd;
+        }
+
+        .volver {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 20px;
+            background: #166534;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+        }
+
+        .volver:hover {
+            background: #14532d;
+        }
+
+        .sin-ubicaciones {
+            padding: 15px;
+            background: #fef3c7;
+            color: #92400e;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="contenedor">
+
+    <h1>📍 Mapa de Aprendices</h1>
+
+    <p>
+        Ubicaciones registradas: {{ total_ubicaciones }}
+    </p>
+
+    {% if not ubicaciones %}
+        <div class="sin-ubicaciones">
+            No hay aprendices con coordenadas registradas.
+            Primero debes registrar sus direcciones.
+        </div>
+    {% endif %}
+
+    <div id="mapa"></div>
+
+    <a href="{% url 'listar_aprendices' %}" class="volver">
+        Volver a aprendices
+    </a>
+
+</div>
+
+<!-- Datos enviados desde Django -->
+{{ ubicaciones|json_script:"datos-ubicaciones" }}
+
+<!-- Leaflet JavaScript -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+
+    // 1. RECIBIR DATOS DESDE DJANGO
+
+    const ubicaciones = JSON.parse(
+        document.getElementById('datos-ubicaciones').textContent
+    );
+
+
+    // 2. CREAR EL MAPA
+
+    const mapa = L.map('mapa').setView(
+        [4.5794, -74.2168],
+        12
+    );
+
+
+    // 3. CARGAR MAPA ESRI
+
+    L.tileLayer(
+        'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',
+        {
+            attribution: 'Tiles &copy; Esri',
+            maxZoom: 19
+        }
+    ).addTo(mapa);
+
+
+    // 4. CREAR MARCADORES
+
+    const marcadores = [];
+
+    ubicaciones.forEach(function(ubicacion) {
+
+        const lat = Number(ubicacion.latitud);
+        const lng = Number(ubicacion.longitud);
+
+        if (
+            Number.isFinite(lat) &&
+            Number.isFinite(lng) &&
+            lat >= -90 && lat <= 90 &&
+            lng >= -180 && lng <= 180 &&
+            (lat !== 0 || lng !== 0)
+        ) {
+
+            const marcador = L.marker([lat, lng]).addTo(mapa);
+
+            marcador.bindPopup(
+                '<strong>Ubicación del aprendiz</strong><br>' +
+                'Latitud: ' + lat + '<br>' +
+                'Longitud: ' + lng
+            );
+
+            marcadores.push(marcador);
+        }
+
+    });
+
+
+    // 5. AJUSTAR MAPA A LOS MARCADORES
+
+    if (marcadores.length > 0) {
+
+        const grupo = L.featureGroup(marcadores);
+
+        mapa.fitBounds(grupo.getBounds().pad(0.2));
+
+    }
+
+
+    // 6. ACTUALIZAR DIMENSIONES
+
+    setTimeout(function() {
+        mapa.invalidateSize();
+    }, 200);
+
+</script>
+
+</body>
+</html>

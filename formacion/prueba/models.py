@@ -1,3 +1,4 @@
+
 from django.db import models
 
 
@@ -9,7 +10,12 @@ class Aprendiz(models.Model):
     telefono = models.CharField(max_length=20)
     correo = models.EmailField()
     ficha = models.CharField(max_length=20)
-    
+
+    # NUEVOS CAMPOS PARA LA UBICACION
+    direccion = models.CharField(max_length=250, blank=True)
+    latitud = models.FloatField(null=True, blank=True)
+    longitud = models.FloatField(null=True, blank=True)
+
     programa = models.ForeignKey(
         'Programa',
         on_delete=models.CASCADE,
@@ -51,6 +57,7 @@ class Instructor(models.Model):
 class Competencia(models.Model):
     nombre = models.CharField(max_length=150)
     ficha = models.CharField(max_length=20)
+
     programa = models.ForeignKey(
         Programa,
         on_delete=models.CASCADE,
@@ -58,6 +65,7 @@ class Competencia(models.Model):
         null=True,
         blank=True
     )
+
     instructor = models.ForeignKey(
         Instructor,
         on_delete=models.CASCADE,
